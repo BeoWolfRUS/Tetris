@@ -1,2 +1,14 @@
 5.5.2f1:3.0.0.1
 StandaloneWindows64
+E:/Games/Новая папка (2)/Editor/Data/Managed/UnityEngine.dll
+E:/Games/Новая папка (2)/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll
+E:/Games/Новая папка (2)/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll
+E:/Games/Новая папка (2)/Editor/Data/UnityExtensions/Unity/PlaymodeTestsRunner/UnityEngine.PlaymodeTestsRunner.dll
+E:/Games/Новая папка (2)/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll
+E:/Games/Новая папка (2)/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll
+E:/Games/Новая папка (2)/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll
+E:/Games/Новая папка (2)/Editor/Data/Managed/UnityEditor.dll
+E:/Games/Новая папка (2)/Editor/Data/Managed/Mono.Cecil.dll
+E:/Games/Новая папка (2)/Editor/Data/PlaybackEngines/AppleTVSupport/UnityEditor.iOS.Extensions.Xcode.dll
+E:/Games/Новая папка (2)/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll
+E:/Games/Новая папка (2)/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll
