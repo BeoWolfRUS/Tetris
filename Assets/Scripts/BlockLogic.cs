@@ -47,6 +47,12 @@ public class BlockLogic : MonoBehaviour {
 		else if(Input.GetKeyDown(KeyCode.UpArrow))
 		{
 			transform.Rotate (0,0,90);
+			if(ValidPos())
+			{
+
+			}
+			else transform.Rotate (0,0,-90);
+
 		}
 
 		else if((Input.GetKeyDown(KeyCode.DownArrow)) || (Time.time - fall >= fallSpeed))
@@ -65,9 +71,10 @@ public class BlockLogic : MonoBehaviour {
 
 	bool ValidPos()
 	{
-		foreach(Transform block in transform)
+		foreach(Transform block in transform )
 		{
 			Vector2 pos = FindObjectOfType<GameLogic>().Round (block.position);
+
 			if(FindObjectOfType<GameLogic>().IsInTheGrid(pos) == false)
 			{
 				return false;
