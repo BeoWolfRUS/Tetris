@@ -97,8 +97,13 @@ public class BlockLogic : MonoBehaviour {
 			{
 
 			}
-			else transform.position += new Vector3(0,1,0);
+			else 
+			{
+				transform.position += new Vector3(0,1,0);
+				enabled = false;
+				FindObjectOfType<GameLogic>().Spawn();
 
+			}
 			fall = Time.time;
 		}
 	}
