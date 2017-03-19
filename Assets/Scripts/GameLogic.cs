@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class GameLogic : MonoBehaviour {
 
-	public int Width = 10;
-	public int Height = 20;
+	public static int Width = 10;
+	public static int Height = 20;
+	public static Transform[,] Field = new Transform[Width, Height];
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +19,102 @@ public class GameLogic : MonoBehaviour {
 	void Update () 
 	{
 		
+	}
+
+	public bool FullRow(int y)
+	{
+		for(int x = 0; x<Width;x++)
+		{
+			if(Field[x,y] == null)
+			{
+					return false;		
+			}
+
+
+		}
+		return true;
+	}
+
+	public void ClearBlock(int y)
+	{
+		for(int x = 0; x<Width;x++)
+		{
+			Destroy(Field[x,y].gameObject);
+			Field[x,y] = null;
+		}
+	}
+
+	public void MoveRowDown(int y)
+	{
+		for(int x = 0; x<Width;x++)
+		{
+			if(Field[x,y] !=null)
+			{
+				Field[x,y-1] = Field[x,y];
+				Field[x,y] = null;
+				Field[x,y-1].position += new Vector3(0,-1,0);
+			}
+		}
+	}
+
+	public void MoveEverythingDown(int y)
+	{
+		for(int i =y;i<Height;i++)
+		{
+			MoveRowDown(i);
+		}
+	}
+
+	public void DeleteRow()
+	{
+		for(int y=0;y<Height;y++)
+		{
+			if(FullRow(y))
+			{
+				ClearBlock(y);
+				MoveEverythingDown(y+1);
+				y--;
+			}
+		}
+	}
+
+	public void UpdateField(BlockLogic block)
+	{
+		for(int y=0;y<Height;y++)
+		{
+			for (int x=0;x<Width;x++)
+			{
+				if(Field[x,y] != null)
+				{
+					if(Field[x,y].parent == block.transform)
+					{
+						Field[x,y] = null;
+					}
+				}
+			}
+		}
+		foreach(Transform bl in block.transform)
+		{
+			Vector2 pos = Round(bl.position);
+			{
+				if(pos.y<Height)
+				{
+					Field[(int)pos.x,(int)pos.y] = bl;
+				}
+			}
+		}
+	}
+
+	public Transform GetFigureInPostion(Vector2 pos)
+	{
+		if(pos.y > Height-1 )
+		{
+			return null;
+		}
+		else
+		{
+			return Field[(int)pos.x,(int)pos.y];
+		}
 	}
 
 	public bool IsInTheGrid(Vector2 pos)

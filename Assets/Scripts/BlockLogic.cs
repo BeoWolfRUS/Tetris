@@ -30,7 +30,7 @@ public class BlockLogic : MonoBehaviour {
 
 			if(ValidPos())
 			{
-				
+				FindObjectOfType<GameLogic>().UpdateField(this);
 			}
 			else transform.position += new Vector3(-1,0,0);
 		}
@@ -41,7 +41,7 @@ public class BlockLogic : MonoBehaviour {
 
 			if(ValidPos())
 			{
-
+				FindObjectOfType<GameLogic>().UpdateField(this);
 			}
 			else transform.position += new Vector3(1,0,0);
 		}
@@ -68,7 +68,7 @@ public class BlockLogic : MonoBehaviour {
 
 					if(ValidPos())
 					{
-
+						FindObjectOfType<GameLogic>().UpdateField(this);
 					}
 					else
 					{
@@ -95,11 +95,13 @@ public class BlockLogic : MonoBehaviour {
 
 			if(ValidPos())
 			{
+				FindObjectOfType<GameLogic>().UpdateField(this);
 
 			}
 			else 
 			{
 				transform.position += new Vector3(0,1,0);
+				FindObjectOfType<GameLogic>().DeleteRow();
 				enabled = false;
 				FindObjectOfType<GameLogic>().Spawn();
 
@@ -115,6 +117,10 @@ public class BlockLogic : MonoBehaviour {
 			Vector2 pos = FindObjectOfType<GameLogic>().Round (block.position);
 
 			if(FindObjectOfType<GameLogic>().IsInTheGrid(pos) == false)
+			{
+				return false;
+			}
+			if(FindObjectOfType<GameLogic>().GetFigureInPostion(pos) != null && FindObjectOfType<GameLogic>().GetFigureInPostion(pos).parent != transform)
 			{
 				return false;
 			}
