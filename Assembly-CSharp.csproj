@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\BlockLogic.cs" />
      <Compile Include="Assets\Scripts\GameLogic.cs" />
+     <Compile Include="Assets\Scripts\MenuLogic.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Games/Новая папка (2)/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

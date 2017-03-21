@@ -9,10 +9,19 @@ public class BlockLogic : MonoBehaviour {
 	public bool AllowRotation = true;
 	public bool LimitRotation = false;
 
+	public AudioClip moveSound;
+	public AudioClip clearRowSound;
+	public AudioClip rotateSound;
+	public AudioClip landSound;
+
+	private AudioSource src;
+
+	bool played = false;
+
 
 	// Use this for initialization
 	void Start () {
-		
+		src = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -31,6 +40,9 @@ public class BlockLogic : MonoBehaviour {
 			if(ValidPos())
 			{
 				FindObjectOfType<GameLogic>().UpdateField(this);
+				src.PlayOneShot(moveSound);
+
+
 			}
 			else transform.position += new Vector3(-1,0,0);
 		}
@@ -42,6 +54,7 @@ public class BlockLogic : MonoBehaviour {
 			if(ValidPos())
 			{
 				FindObjectOfType<GameLogic>().UpdateField(this);
+				src.PlayOneShot(moveSound);
 			}
 			else transform.position += new Vector3(1,0,0);
 		}
@@ -69,6 +82,7 @@ public class BlockLogic : MonoBehaviour {
 					if(ValidPos())
 					{
 						FindObjectOfType<GameLogic>().UpdateField(this);
+					src.PlayOneShot(rotateSound);
 					}
 					else
 					{
@@ -88,20 +102,28 @@ public class BlockLogic : MonoBehaviour {
 
 			}
 		}
+			
 
-		else if((Input.GetKeyDown(KeyCode.DownArrow)) || (Time.time - fall >= fallSpeed))
+		else if((Input.GetKey(KeyCode.DownArrow)) || (Time.time - fall >= fallSpeed))
 		{
 			transform.position += new Vector3(0,-1,0);
 
 			if(ValidPos())
 			{
+				
 				FindObjectOfType<GameLogic>().UpdateField(this);
+				if(!played)
 
 			}
 			else 
 			{
 				transform.position += new Vector3(0,1,0);
+				src.PlayOneShot(landSound);
 				FindObjectOfType<GameLogic>().DeleteRow();
+				if(FindObjectOfType<GameLogic>().AboveField(this))
+				{
+					FindObjectOfType<GameLogic>().GameOver();
+				}
 				enabled = false;
 				FindObjectOfType<GameLogic>().Spawn();
 

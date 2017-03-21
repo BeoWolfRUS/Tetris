@@ -1,12 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameLogic : MonoBehaviour {
 
 	public static int Width = 10;
 	public static int Height = 20;
 	public static Transform[,] Field = new Transform[Width, Height];
+
+	public int score1 = 100;
+	public int score2 = 250;
+	public int score3 = 550;
+	public int score4 = 1000;
+
+	public int score = 0;
+
+	public Text scoreText;
+
+	public int HowMuchRowsDeleted = 0;
+
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +31,48 @@ public class GameLogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		
+		UpdateScore(HowMuchRowsDeleted);
+
+	}
+
+	public void UpdateScore(int rows)
+	{
+		switch(rows)
+		{
+		case 1:
+			score +=score1;
+			break;
+			
+		case 2:
+			score +=score2;
+			break;
+			
+		case 3:
+			score +=score3;
+			break;
+			
+		case 4:
+			score +=score4;
+			break;
+		}
+		scoreText.text = score.ToString();
+		HowMuchRowsDeleted = 0;
+	}
+
+	public bool AboveField(BlockLogic figure)
+	{
+		for(int x =0;x<Width;x++)
+		{
+			foreach(Transform block in figure.transform)
+			{
+				Vector2 pos = Round(block.position);
+				if(pos.y > Height -1)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public bool FullRow(int y)
@@ -32,6 +86,7 @@ public class GameLogic : MonoBehaviour {
 
 
 		}
+		HowMuchRowsDeleted++;
 		return true;
 	}
 
@@ -129,7 +184,7 @@ public class GameLogic : MonoBehaviour {
 
 	public void Spawn()
 	{
-		GameObject nextFigure = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), new Vector2(5f,16f),Quaternion.identity);
+		GameObject nextFigure = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), new Vector2(5f,20f),Quaternion.identity);
 	}
 
 	string ChooseFigure()
@@ -155,5 +210,10 @@ public class GameLogic : MonoBehaviour {
 
 		}
 		return FigName;
+	}
+
+	public void GameOver()
+	{
+		Application.LoadLevel("GameOver");
 	}
 }
