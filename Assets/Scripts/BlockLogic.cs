@@ -5,12 +5,11 @@ using UnityEngine;
 public class BlockLogic : MonoBehaviour {
 
 	float fall =0;
-	public float fallSpeed = 1;
+	private float fallSpeed;
 	public bool AllowRotation = true;
 	public bool LimitRotation = false;
 
 	public AudioClip moveSound;
-	public AudioClip clearRowSound;
 	public AudioClip rotateSound;
 	public AudioClip landSound;
 
@@ -22,6 +21,7 @@ public class BlockLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		src = GetComponent<AudioSource>();
+		fallSpeed = GameObject.Find("Border").GetComponent<GameLogic>().FallSpeed;
 	}
 	
 	// Update is called once per frame
@@ -104,7 +104,7 @@ public class BlockLogic : MonoBehaviour {
 		}
 			
 
-		else if((Input.GetKey(KeyCode.DownArrow)) || (Time.time - fall >= fallSpeed))
+		if((Input.GetKey(KeyCode.DownArrow)) || (Time.time - fall >= fallSpeed))
 		{
 			transform.position += new Vector3(0,-1,0);
 
@@ -112,7 +112,6 @@ public class BlockLogic : MonoBehaviour {
 			{
 				
 				FindObjectOfType<GameLogic>().UpdateField(this);
-				if(!played)
 
 			}
 			else 

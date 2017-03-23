@@ -14,25 +14,68 @@ public class GameLogic : MonoBehaviour {
 	public int score3 = 550;
 	public int score4 = 1000;
 
+	public int LinesCleared;
+	public static int CurrentLevel;
+
+	int LinesTillNextLevel;
+
+	public float FallSpeed = 1.0f;
+
+	private AudioSource src;
+	public AudioClip clear1;
+	public AudioClip clear2;
+	public AudioClip clear3;
+	public AudioClip clear4;
+	public AudioClip levelUp;
+
 	public int score = 0;
 
 	public Text scoreText;
+	public Text LevelText;
+	public Text LinesText;
 
 	public int HowMuchRowsDeleted = 0;
+
+	private GameObject NextTetrimino;
+	private GameObject SpawnTetrimno;
+
+	private bool GameStarted = false;
+
+	Vector2 NextPos = new Vector2(-6.5f,15);
 
 
 	// Use this for initialization
 	void Start () {
-
-		Spawn();
 		
+		LinesTillNextLevel = (CurrentLevel+1)*10;
+		src = GetComponent<AudioSource>();
+		Spawn();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		UpdateScore(HowMuchRowsDeleted);
+		UpdateLevel();
+		UpdateSpeed();
 
+	}
+
+	void UpdateLevel()
+	{
+		if(LinesCleared>=LinesTillNextLevel)
+		{
+			CurrentLevel++;
+			src.PlayOneShot(levelUp);
+			LinesTillNextLevel += (CurrentLevel+1)*10;
+		}
+		LevelText.text = (CurrentLevel+1).ToString();
+
+	}
+
+	void UpdateSpeed()
+	{
+		FallSpeed = 1.0f - (float)CurrentLevel * 0.1f;
 	}
 
 	public void UpdateScore(int rows)
@@ -41,20 +84,26 @@ public class GameLogic : MonoBehaviour {
 		{
 		case 1:
 			score +=score1;
+			src.PlayOneShot(clear1);
 			break;
 			
 		case 2:
 			score +=score2;
+			src.PlayOneShot(clear2);
 			break;
 			
 		case 3:
 			score +=score3;
+			src.PlayOneShot(clear3);
 			break;
 			
 		case 4:
 			score +=score4;
+			src.PlayOneShot(clear4);
 			break;
 		}
+		LinesCleared +=rows;
+		LinesText.text = LinesCleared.ToString();
 		scoreText.text = score.ToString();
 		HowMuchRowsDeleted = 0;
 	}
@@ -184,7 +233,23 @@ public class GameLogic : MonoBehaviour {
 
 	public void Spawn()
 	{
-		GameObject nextFigure = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), new Vector2(5f,20f),Quaternion.identity);
+		if(!GameStarted)
+		{
+			GameStarted = true;
+			SpawnTetrimno = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), new Vector2(5f,20f),Quaternion.identity);
+			NextTetrimino = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), NextPos,Quaternion.identity);
+			NextTetrimino.GetComponent<BlockLogic>().enabled = false;
+		}
+		else
+		{
+			NextTetrimino.transform.localPosition = new Vector2(5f,20f);
+			SpawnTetrimno = NextTetrimino;
+			SpawnTetrimno.GetComponent<BlockLogic>().enabled = true;
+
+			NextTetrimino = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), NextPos,Quaternion.identity);
+			NextTetrimino.GetComponent<BlockLogic>().enabled = false;
+		}
+
 	}
 
 	string ChooseFigure()
@@ -193,19 +258,19 @@ public class GameLogic : MonoBehaviour {
 		string FigName = "Prefabs/J_tetrimino";
 		switch(rand)
 		{
-		case 1: FigName = "Prefabs/J_tetrimino";
+		case 0: FigName = "Prefabs/J_tetrimino";
 			break;
-		case 2: FigName = "Prefabs/L_tetrimino";
+		case 1: FigName = "Prefabs/L_tetrimino";
 			break;
-		case 3: FigName = "Prefabs/Line_tetrimino";
+		case 2: FigName = "Prefabs/Line_tetrimino";
 			break;
-		case 4: FigName = "Prefabs/S_tetrimino";
+		case 3: FigName = "Prefabs/S_tetrimino";
 			break;
-		case 5: FigName = "Prefabs/Square_tetrimino";
+		case 4: FigName = "Prefabs/Square_tetrimino";
 			break;
-		case 6: FigName = "Prefabs/T_tetrimino";
+		case 5: FigName = "Prefabs/T_tetrimino";
 			break;
-		case 7: FigName = "Prefabs/Z_tetrimino";
+		case 6: FigName = "Prefabs/Z_tetrimino";
 			break;
 
 		}
