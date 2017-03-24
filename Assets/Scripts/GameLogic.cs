@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using UnityStandardAssets.ImageEffects;
+
+
 
 public class GameLogic : MonoBehaviour {
 
@@ -13,6 +17,8 @@ public class GameLogic : MonoBehaviour {
 	public int score2 = 250;
 	public int score3 = 550;
 	public int score4 = 1000;
+
+	public int highscore;
 
 	public int LinesCleared;
 	public static int CurrentLevel;
@@ -28,11 +34,16 @@ public class GameLogic : MonoBehaviour {
 	public AudioClip clear4;
 	public AudioClip levelUp;
 
-	public int score = 0;
+	public static bool Paused = false;
+
+	public static int score = 0;
 
 	public Text scoreText;
 	public Text LevelText;
 	public Text LinesText;
+
+	public Canvas hud_score;
+	public Canvas hud_pause;
 
 	public int HowMuchRowsDeleted = 0;
 
@@ -47,6 +58,7 @@ public class GameLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
+		
 		LinesTillNextLevel = (CurrentLevel+1)*10;
 		src = GetComponent<AudioSource>();
 		Spawn();
@@ -55,9 +67,35 @@ public class GameLogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
+		CheckInput();
 		UpdateScore(HowMuchRowsDeleted);
 		UpdateLevel();
 		UpdateSpeed();
+	}
+
+	void CheckInput()
+	{
+		if(Input.GetKeyUp(KeyCode.Escape))
+		{
+			if(!Paused)
+			{
+				Time.timeScale= 0;
+				src.Pause();
+				hud_score.enabled = false;
+				hud_pause.enabled = true;
+				Paused = true;
+				Camera.main.GetComponent<Blur>().enabled = true;
+			}
+			else
+			{
+				Time.timeScale = 1;
+				src.UnPause();
+				Paused = false;
+				hud_pause.enabled = false;
+				hud_score.enabled = true;
+				Camera.main.GetComponent<Blur>().enabled = false;
+			}
+		}
 
 	}
 
@@ -73,7 +111,7 @@ public class GameLogic : MonoBehaviour {
 
 	}
 
-	void UpdateSpeed()
+	public void UpdateSpeed()
 	{
 		FallSpeed = 1.0f - (float)CurrentLevel * 0.1f;
 	}
@@ -279,6 +317,12 @@ public class GameLogic : MonoBehaviour {
 
 	public void GameOver()
 	{
-		Application.LoadLevel("GameOver");
+		if(score > PlayerPrefs.GetInt("HighScore"))
+		{
+			PlayerPrefs.SetInt("HighScore",score);
+		}
+		MenuLogic.score = score;
+		SceneManager.LoadScene("GameOver");
+
 	}
 }

@@ -15,19 +15,22 @@ public class BlockLogic : MonoBehaviour {
 
 	private AudioSource src;
 
-	bool played = false;
 
 
 	// Use this for initialization
 	void Start () {
 		src = GetComponent<AudioSource>();
-		fallSpeed = GameObject.Find("Border").GetComponent<GameLogic>().FallSpeed;
+		fallSpeed = 1.0f - (float)GameLogic.CurrentLevel * 0.1f;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		CheckForInput();
+		if(!GameLogic.Paused)
+		{
+			CheckForInput();
+		}
+
 	}
 
 	void CheckForInput()
