@@ -12,6 +12,9 @@ public class MenuLogic : MonoBehaviour {
 	public Text Congrats;
 	public static int score;
 
+	public Canvas hud_pause;
+	public Canvas hud_ext;
+
 	// Use this for initialization
 	void Start () {
 		switch(SceneManager.GetActiveScene().name)
@@ -53,6 +56,8 @@ public class MenuLogic : MonoBehaviour {
 	{
 		GameLogic.score = 0;
 		SceneManager.LoadScene("MainMenu");
+		Time.timeScale = 1;
+		GameLogic.Paused = false;
 	}
 
 	public void ChangedValue(float val)
@@ -65,5 +70,26 @@ public class MenuLogic : MonoBehaviour {
 	{
 		PlayerPrefs.SetInt("HighScore",0);
 		HighScore.text = "0";
+	}
+	public void Exit()
+	{
+		Application.Quit();
+	}
+
+	public void MenuFromPause()
+	{
+		hud_pause.enabled = false;
+		hud_ext.enabled = true;
+	}
+
+	public void BackToPause()
+	{
+		hud_pause.enabled = true;
+		hud_ext.enabled = false;
+	}
+
+	public void ToOptions()
+	{
+		SceneManager.LoadScene("Options");
 	}
 }

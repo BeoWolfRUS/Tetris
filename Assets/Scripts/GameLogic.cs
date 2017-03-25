@@ -44,11 +44,13 @@ public class GameLogic : MonoBehaviour {
 
 	public Canvas hud_score;
 	public Canvas hud_pause;
+	public Canvas hud_ext;
 
 	public int HowMuchRowsDeleted = 0;
 
 	private GameObject NextTetrimino;
 	private GameObject SpawnTetrimno;
+	private GameObject GhostTetrimino;
 
 	private bool GameStarted = false;
 
@@ -61,6 +63,12 @@ public class GameLogic : MonoBehaviour {
 		
 		LinesTillNextLevel = (CurrentLevel+1)*10;
 		src = GetComponent<AudioSource>();
+
+		if(PlayerPrefs.GetInt("BGM")==0)
+		{
+			src.GetComponent<AudioSource>().Stop();
+		}
+		else src.GetComponent<AudioSource>().Play();
 		Spawn();
 	}
 	
@@ -71,6 +79,17 @@ public class GameLogic : MonoBehaviour {
 		UpdateScore(HowMuchRowsDeleted);
 		UpdateLevel();
 		UpdateSpeed();
+	}
+
+	public void SpawnGhost()
+	{
+		if(GameObject.FindGameObjectWithTag("Ghost") != null)
+		{
+			Destroy(GameObject.FindGameObjectWithTag("Ghost"));
+		}
+		GhostTetrimino = (GameObject)Instantiate(SpawnTetrimno, SpawnTetrimno.transform.position,Quaternion.identity);
+		Destroy(GhostTetrimino.GetComponent<BlockLogic>());
+		GhostTetrimino.AddComponent<Ghost>();
 	}
 
 	void CheckInput()
@@ -92,6 +111,7 @@ public class GameLogic : MonoBehaviour {
 				src.UnPause();
 				Paused = false;
 				hud_pause.enabled = false;
+				hud_ext.enabled = false;
 				hud_score.enabled = true;
 				Camera.main.GetComponent<Blur>().enabled = false;
 			}
@@ -104,7 +124,10 @@ public class GameLogic : MonoBehaviour {
 		if(LinesCleared>=LinesTillNextLevel)
 		{
 			CurrentLevel++;
-			src.PlayOneShot(levelUp);
+			if(PlayerPrefs.GetInt("SFX")==1)
+			{
+				src.PlayOneShot(levelUp);
+			}
 			LinesTillNextLevel += (CurrentLevel+1)*10;
 		}
 		LevelText.text = (CurrentLevel+1).ToString();
@@ -121,23 +144,54 @@ public class GameLogic : MonoBehaviour {
 		switch(rows)
 		{
 		case 1:
-			score +=score1;
-			src.PlayOneShot(clear1);
+			
+			if(PlayerPrefs.GetInt("GST")== 0)
+			{
+				score +=score1;
+			}
+			else score += score1/2;
+
+			if(PlayerPrefs.GetInt("SFX")==1)
+			{
+				src.PlayOneShot(clear1);
+			}
 			break;
 			
 		case 2:
-			score +=score2;
-			src.PlayOneShot(clear2);
+			if(PlayerPrefs.GetInt("GST")== 0)
+			{
+				score +=score2;
+			}
+			else score += score2/2;
+
+			if(PlayerPrefs.GetInt("SFX")==1)
+			{
+				src.PlayOneShot(clear2);
+			}
 			break;
 			
 		case 3:
-			score +=score3;
-			src.PlayOneShot(clear3);
+			if(PlayerPrefs.GetInt("GST")== 0)
+			{
+				score +=score3;
+			}
+			else score += score3/2;
+			if(PlayerPrefs.GetInt("SFX")==1)
+			{
+				src.PlayOneShot(clear3);
+			}
 			break;
 			
 		case 4:
-			score +=score4;
-			src.PlayOneShot(clear4);
+			if(PlayerPrefs.GetInt("GST")== 0)
+			{
+				score +=score4;
+			}
+			else score += score4/2;
+			if(PlayerPrefs.GetInt("SFX")==1)
+			{
+				src.PlayOneShot(clear4);
+			}
 			break;
 		}
 		LinesCleared +=rows;
@@ -277,15 +331,28 @@ public class GameLogic : MonoBehaviour {
 			SpawnTetrimno = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), new Vector2(5f,20f),Quaternion.identity);
 			NextTetrimino = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), NextPos,Quaternion.identity);
 			NextTetrimino.GetComponent<BlockLogic>().enabled = false;
+
+			if(PlayerPrefs.GetInt("GST")==1)
+			{
+				SpawnGhost();
+			}
 		}
 		else
 		{
 			NextTetrimino.transform.localPosition = new Vector2(5f,20f);
 			SpawnTetrimno = NextTetrimino;
 			SpawnTetrimno.GetComponent<BlockLogic>().enabled = true;
+			SpawnTetrimno.tag = "current";
+
+			if(PlayerPrefs.GetInt("GST")==1)
+			{
+				SpawnGhost();
+			}
 
 			NextTetrimino = (GameObject)Instantiate(Resources.Load(ChooseFigure(),typeof(GameObject)), NextPos,Quaternion.identity);
 			NextTetrimino.GetComponent<BlockLogic>().enabled = false;
+
+
 		}
 
 	}

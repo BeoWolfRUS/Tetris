@@ -29,3 +29,4 @@ C:\Users\BeoWolfRUS\Documents\Tetris\Temp\bin\Debug\UnityEngine.VR.xml
 C:\Users\BeoWolfRUS\Documents\Tetris\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\BeoWolfRUS\Documents\Tetris\obj\Debug\Assembly-CSharp.dll
 C:\Users\BeoWolfRUS\Documents\Tetris\obj\Debug\Assembly-CSharp.pdb
+C:\Users\BeoWolfRUS\Documents\Tetris\Temp\bin\Debug\Assembly-CSharp-firstpass.pdb
