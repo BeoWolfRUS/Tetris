@@ -14,6 +14,7 @@ public class MenuLogic : MonoBehaviour {
 
 	public Canvas hud_pause;
 	public Canvas hud_ext;
+	private AudioSource src;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +24,11 @@ public class MenuLogic : MonoBehaviour {
 			HighScore.text = PlayerPrefs.GetInt("HighScore").ToString();
 			break;
 			case "GameOver":
+			src = GetComponent<AudioSource>();
+			if(PlayerPrefs.GetInt("BGM")==0)
+			{
+				src.Stop();
+			}
 			ScoreText.text = score.ToString();
 			if(score == PlayerPrefs.GetInt("HighScore"))
 			{

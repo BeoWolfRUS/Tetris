@@ -54,7 +54,7 @@ public class GameLogic : MonoBehaviour {
 
 	private bool GameStarted = false;
 
-	Vector2 NextPos = new Vector2(-6.5f,15);
+	Vector2 NextPos = new Vector2(-7,15);
 
 
 	// Use this for initialization
@@ -236,6 +236,7 @@ public class GameLogic : MonoBehaviour {
 		for(int x = 0; x<Width;x++)
 		{
 			Destroy(Field[x,y].gameObject);
+			GameObject spark = (GameObject)Instantiate(Resources.Load("Prefabs/Sparks",typeof(GameObject)), new Vector2((float)x,(float)y),Quaternion.identity);
 			Field[x,y] = null;
 		}
 	}
